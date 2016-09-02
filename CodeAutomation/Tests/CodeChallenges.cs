@@ -3,26 +3,28 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using CodeAutomation.Pages;
+using System.Threading;
 
 namespace CodeAutomation
 {
     [TestClass]
     public class CodeChallenges
     {
-        SetUp setUp = new SetUp();
+        Common common = new Common();
         IWebDriver chromeDriver = new ChromeDriver();
         PlanYourTrip pyt = new PlanYourTrip();
         ResortsAndSnow rsn = new ResortsAndSnow();
         Stories stories = new Stories();
         Deals deals = new Deals();
         Passes passes = new Passes();
-        Explore explore = new Explore(); 
+        Explore explore = new Explore();
+        IndexPage indexPage = new IndexPage();
 
         //Challenge #1
         [TestMethod]
         public void TestForCorrectWebsite()
         {
-            setUp.GoToSkiUtahWebsite(chromeDriver);
+            common.GoToSkiUtahWebsite(chromeDriver);
 
             string titleString = chromeDriver.Title;
             string validationTitle = "Ski Utah";
@@ -37,41 +39,70 @@ namespace CodeAutomation
                 Assert.IsFalse(validationTitle.Equals(actualTitle));
                 throw new AssertFailedException(validationTitle + " does not match " + actualTitle); //Force fails test if strings are not equal              
             }
-           
+
         }
 
         //Challenge #2
         [TestMethod]
-        public void TestForSubMenuNavigation()
+        public void TestForMenuNav()
         {
-            setUp.GoToSkiUtahWebsite(chromeDriver);
+            common.GoToSkiUtahWebsite(chromeDriver);
 
             try
             {
-                pyt.NavigateSubMenu(chromeDriver, "Lodging");
-                rsn.NavigateSubMenu(chromeDriver, "Resort Comparison");
-                deals.NavigateSubMenu(chromeDriver, "Beginner");
-                passes.NavigateSubMenu(chromeDriver, "");
-                // explore.NavigateSubMenu(chromeDriver, ""); 
+                common.NavigateMenu(chromeDriver, "PLAN YOUR TRIP");
+                common.NavigateMenu(chromeDriver, "RESORTS & SNOW");
+                common.NavigateMenu(chromeDriver, "STORIES");
+                common.NavigateMenu(chromeDriver, "DEALS");
+                common.NavigateMenu(chromeDriver, "PASSES");
+                common.NavigateMenu(chromeDriver, "EXPLORE");
             }
             catch
             {
-                throw new AssertFailedException("Could not find Submenu Navigation Link"); 
+                throw new AssertFailedException("Could not find menu navigation link");
             }
-            
+
         }
 
         //Challenge #3
         [TestMethod]
-        public void TestMethod3()
+        public void TestForSubMenuNavigation()
         {
+            common.GoToSkiUtahWebsite(chromeDriver);
+
+            try
+            {
+                //here is one example for each submenu:
+                pyt.NavigateSubMenu(chromeDriver, "Lodging");
+                rsn.NavigateSubMenu(chromeDriver, "Resort Comparison");
+                deals.NavigateSubMenu(chromeDriver, "Beginner");
+                passes.NavigateSubMenu(chromeDriver, "Purchase Utah Lift Tickets");
+                explore.NavigateSubMenu(chromeDriver, "Utah Areas 101");
+            }
+            catch
+            {
+                throw new AssertFailedException("Could not find submenu navigation link");
+            }
 
         }
 
+
         //Challenge #4
         [TestMethod]
-        public void TestMethod4()
+        public void TestForTimeFromAirport()
         {
+            common.GoToSkiUtahWebsite(chromeDriver);
+            Thread.Sleep(5000);
+
+            try
+            {
+
+                indexPage.RetrieveTimeFromAirport(chromeDriver, "Beaver Mountain");
+            }
+            catch
+            {
+                throw new AssertFailedException("Could not find ski resort");
+            }
 
         }
 

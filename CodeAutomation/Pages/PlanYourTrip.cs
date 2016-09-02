@@ -25,14 +25,14 @@ namespace CodeAutomation.Pages
             IWebElement subMenuDiv = driver.FindElement(By.CssSelector("#top_menu > ul > li:nth-child(1) > ul"));
             IList<IWebElement> AllSubMenuLinks = subMenuDiv.FindElements(By.TagName("a"));
 
-            foreach(IWebElement item in AllSubMenuLinks)
+            foreach (IWebElement item in AllSubMenuLinks)
             {
-                if(item.Text.Contains(subMenuName))
+                if (item.Text.Contains(subMenuName))
                 {
                     item.Click();
                     break;
                 }
-             }
-        }    
+            }
+        }
     }
 }
